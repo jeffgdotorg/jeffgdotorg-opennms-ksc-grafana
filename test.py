@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 
-import json
 import snmp_graph
 import ksc_report
 import grafana_dashboard
-import grafana_api
+import file_output
+#import grafana_api
 
 g_url_base = "http://localhost:3000"
 g_api_key = "eyJrIjoiRURGa25RSkpwTTlQYXQ2WVY2emZXMjFRb2VjQkFLcksiLCJuIjoicHl0aG9uLXB1c2hlciIsImlkIjoxfQ=="
+output_dir = "./dashboards/"
 
 sg = snmp_graph.load_graphs("/Users/jeffg/Documents/clients/USPTO/2020/20201222_ksc_report_to_grafana/snmp-graph.properties.d")
 ksc = ksc_report.load_reports("/Users/jeffg/Documents/clients/USPTO/2020/20201222_ksc_report_to_grafana/ksc-performance-reports.xml")
@@ -25,5 +26,4 @@ for report in ksc:
     new_panel = grafana_dashboard.graph_panel(panel_id, title, description, left_y_label, resource, attributes)
     panel_id += 1
     grafana_dashboard.append_panel(dash_dict, new_panel)
-    post_result = grafana_api.post_dashboard(g_url_base, g_api_key, dash_dict)
-    print(post_result.json())
+    file_output.write_to_file(output_dir, dash_dict)
