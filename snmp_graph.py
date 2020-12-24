@@ -28,7 +28,16 @@ def get_resource_type(props, graph_name):
   return _get_graph_prop(props, graph_name, 'type')
 
 def get_vertical_label(props, graph_name):
-  pat = re.compile('\s+--vertical-label="(.*?)"\s+')
+  pat = re.compile('--vertical-label="(.*?)"')
+  graph_cmd = get_command(props, graph_name)
+  if (graph_cmd is None):
+    return None
+  mat = pat.search(graph_cmd)
+  if mat:
+    return mat.group(1)
+
+def get_title(props, graph_name):
+  pat = re.compile('--title="(.*?)"')
   graph_cmd = get_command(props, graph_name)
   if (graph_cmd is None):
     return None
