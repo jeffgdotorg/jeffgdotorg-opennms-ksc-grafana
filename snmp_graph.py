@@ -18,11 +18,12 @@ def get_name(props, graph_name):
   return _get_graph_prop(props, graph_name, 'name')
 
 def get_attributes(props, graph_name):
-  pat = re.compile('\s*,\s*')
-  vals = _get_graph_prop(props, graph_name, 'columns')
-  if (vals is None):
+  attrs = []
+  pat = re.compile('DEF:(\S+)={rrd\d+}:(\S+):')
+  graph_cmd = get_command(props, graph_name)
+  if (graph_cmd is None):
     return []
-  return pat.split(vals)
+  return re.findall(pat, graph_cmd)
 
 def get_resource_type(props, graph_name):
   return _get_graph_prop(props, graph_name, 'type')
@@ -47,7 +48,7 @@ def get_title(props, graph_name):
 
 def get_expressions(props, graph_name):
   exprs = []
-  pat = re.compile('\s*CDEF:(\S+)=(\S+)\s+')
+  pat = re.compile('CDEF:(\S+)=(\S+)\s+')
   graph_cmd = get_command(props, graph_name)
   if (graph_cmd is None):
     return []

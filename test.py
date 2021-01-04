@@ -19,7 +19,7 @@ for report in ksc:
   panel_id = 1
   for graph in report:
     title = graph.get('title') + ' – ' + snmp_graph.get_title(sg, graph.get("graphtype"))
-    description = snmp_graph.get_command(sg, graph.get("graphtype"))
+    description = snmp_graph.get_name(sg, graph.get("graphtype"))
     left_y_label = snmp_graph.get_vertical_label(sg, graph.get("graphtype"))
     resource = graph.get("resourceId")
     attributes = snmp_graph.get_attributes(sg, graph.get("graphtype"))
