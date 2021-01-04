@@ -23,7 +23,8 @@ for report in ksc:
     left_y_label = snmp_graph.get_vertical_label(sg, graph.get("graphtype"))
     resource = graph.get("resourceId")
     attributes = snmp_graph.get_attributes(sg, graph.get("graphtype"))
-    new_panel = grafana_dashboard.graph_panel(panel_id, title, description, left_y_label, resource, attributes)
+    expressions = snmp_graph.get_expressions(sg, graph.get("graphtype"))
+    new_panel = grafana_dashboard.graph_panel(panel_id, title, description, left_y_label, resource, attributes, expressions)
     panel_id += 1
     grafana_dashboard.append_panel(dash_dict, new_panel)
     file_output.write_to_file(output_dir, dash_dict)

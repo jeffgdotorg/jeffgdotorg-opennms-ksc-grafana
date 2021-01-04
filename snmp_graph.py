@@ -45,6 +45,14 @@ def get_title(props, graph_name):
   if mat:
     return mat.group(1)
 
+def get_expressions(props, graph_name):
+  exprs = []
+  pat = re.compile('\s*CDEF:(\S+)=(\S+)\s+')
+  graph_cmd = get_command(props, graph_name)
+  if (graph_cmd is None):
+    return []
+  return re.findall(pat, graph_cmd)
+
 def get_command(props, graph_name):
   return _get_graph_prop(props, graph_name, 'command')
 
