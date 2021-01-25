@@ -42,16 +42,18 @@ def graph_panel(panel_id, title, description, left_y_label, resource, attributes
 
   for bute in attributes:
     ref_id = 'A' + str(ref_idx)
+    attr_label = get_label_for_var(bute[0], visible_vars, node_id, resource_id)
     do_hide = bute[0] not in visible_vars
-    panel_dict['targets'].append( { 'type': 'attribute', 'attribute': bute[1], 'label': bute[0], 'nodeId': node_id, 'refId': ref_id, 'resourceId': resource_id, 'hide': do_hide } )
+    panel_dict['targets'].append( { 'type': 'attribute', 'attribute': bute[1], 'label': attr_label, 'nodeId': node_id, 'refId': ref_id, 'resourceId': resource_id, 'hide': do_hide } )
     panel_dict['yaxes'].append( { 'format': 'short', 'label': left_y_label if ref_id == 0 else '', 'logBase': 1, 'max': None, 'min': None, 'show': True } )
     ref_idx += 1
 
   ref_idx = 0
   for expr in expressions:
     ref_id = 'E' + str(ref_idx)
+    expr_label = get_label_for_var(expr[0], visible_vars, node_id, resource_id)
     do_hide = expr[0] not in visible_vars
-    panel_dict['targets'].append( { 'type': 'expression', 'label': expr[0], 'expression': jexl_for_rpn(expr[1]), 'refId': ref_id, 'hide': do_hide } )
+    panel_dict['targets'].append( { 'type': 'expression', 'label': expr_label, 'expression': jexl_for_rpn(expr[1]), 'refId': ref_id, 'hide': do_hide } )
     panel_dict['yaxes'].append( { 'format': 'short', 'label': left_y_label if ref_id == 0 else '', 'logBase': 1, 'max': None, 'min': None, 'show': True } )
     ref_idx += 1
 
@@ -60,3 +62,15 @@ def graph_panel(panel_id, title, description, left_y_label, resource, attributes
 def append_panel(dash_dict, panel_dict):
   dash_dict['panels'].append( panel_dict )
   return dash_dict
+
+def get_label_for_var(var_name, visible_vars, node_id, resource_id):
+  label_base = var_name
+  if var_name in visible_vars:
+    if 'label' in visible_vars[var_name]:
+      label_base = visible_vars[var_name]['label']
+      label_suffix = 'nodeToLabel(' + node_id + ')'
+      if resource_id != 'nodeSnmp[]':
+        label_suffix += ' :: resourceToLabel(' + node_id + ', ' + resource_id + ')'
+      return label_base + ': ' + label_suffix
+  else:
+    return var_name

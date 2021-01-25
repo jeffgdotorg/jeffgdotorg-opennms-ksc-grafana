@@ -56,12 +56,12 @@ def get_expressions(props, graph_name):
 
 def get_visible_vars(props, graph_name):
   vars = {}
-  pat = re.compile('(AREA|LINE.?|STACK):(\w+)#([0-9A-Fa-f]+):"(.*?)"')
+  pat = re.compile("""(AREA|LINE.?|STACK):(\w+)#([0-9A-Fa-f]+):["'](.*?)["']""")
   graph_cmd = get_command(props, graph_name)
   if (graph_cmd is None):
     return {}
   for vv_mat in pat.finditer(graph_cmd):
-    vars[ vv_mat.group(2) ] = { 'type': vv_mat.group(1), 'var': vv_mat.group(2), 'color': vv_mat.group(3), 'label': str(vv_mat.groups(4)).strip() }
+    vars[ vv_mat.group(2) ] = { 'type': vv_mat.group(1), 'var': vv_mat.group(2), 'color': vv_mat.group(3), 'label': str(vv_mat.group(4)).strip() }
   return vars
 
 def get_command(props, graph_name):
