@@ -30,7 +30,7 @@ def set_dashboard_title(dash_dict, title):
 
 def graph_panel(panel_id, title, description, left_y_label, resource, attributes, expressions):
   ref_idx = 0
-  resource_pat = re.compile('^(node.*?\[.*?\])\.(\w+\[.*?\])$')
+  resource_pat = re.compile('^node.*?\[(.*?)\]\.(\w+\[.*?\])$')
   node_id = None
   resource_id = None
   resource_mat = resource_pat.search(str(resource))
