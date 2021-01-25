@@ -28,7 +28,7 @@ def empty_dashboard():
 def set_dashboard_title(dash_dict, title):
   dash_dict['title'] = title
 
-def graph_panel(panel_id, title, description, left_y_label, resource, attributes, expressions):
+def graph_panel(panel_id, title, description, left_y_label, resource, attributes, expressions, visible_vars):
   ref_idx = 0
   resource_pat = re.compile('^node.*?\[(.*?)\]\.(\w+\[.*?\])$')
   node_id = None
@@ -42,14 +42,16 @@ def graph_panel(panel_id, title, description, left_y_label, resource, attributes
 
   for bute in attributes:
     ref_id = 'A' + str(ref_idx)
-    panel_dict['targets'].append( { 'type': 'attribute', 'attribute': bute[1], 'label': bute[0], 'nodeId': node_id, 'refId': ref_id, 'resourceId': resource_id } )
+    do_hide = bute[0] not in visible_vars
+    panel_dict['targets'].append( { 'type': 'attribute', 'attribute': bute[1], 'label': bute[0], 'nodeId': node_id, 'refId': ref_id, 'resourceId': resource_id, 'hide': do_hide } )
     panel_dict['yaxes'].append( { 'format': 'short', 'label': left_y_label if ref_id == 0 else '', 'logBase': 1, 'max': None, 'min': None, 'show': True } )
     ref_idx += 1
 
   ref_idx = 0
   for expr in expressions:
     ref_id = 'E' + str(ref_idx)
-    panel_dict['targets'].append( { 'type': 'expression', 'label': expr[0], 'expression': jexl_for_rpn(expr[1]), 'refId': ref_id } )
+    do_hide = expr[0] not in visible_vars
+    panel_dict['targets'].append( { 'type': 'expression', 'label': expr[0], 'expression': jexl_for_rpn(expr[1]), 'refId': ref_id, 'hide': do_hide } )
     panel_dict['yaxes'].append( { 'format': 'short', 'label': left_y_label if ref_id == 0 else '', 'logBase': 1, 'max': None, 'min': None, 'show': True } )
     ref_idx += 1
 
