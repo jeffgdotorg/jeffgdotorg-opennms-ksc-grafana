@@ -28,7 +28,7 @@ def empty_dashboard():
 def set_dashboard_title(dash_dict, title):
   dash_dict['title'] = title
 
-def graph_panel(panel_id, title, description, left_y_label, resource, attributes, expressions, visible_vars):
+def graph_panel(panel_id, title, description, left_y_label, resource, attributes, expressions, visible_vars, height = 9, width = 12, x_loc = 0, y_loc = 0):
   ref_idx = 0
   resource_pat = re.compile('^node.*?\[(.*?)\]\.(\w+\[.*?\])$')
   node_id = None
@@ -38,7 +38,7 @@ def graph_panel(panel_id, title, description, left_y_label, resource, attributes
     node_id = resource_mat.group(1)
     resource_id = resource_mat.group(2)
 
-  panel_dict = { 'aliasColors': {}, 'bars': False, 'dashLength': 10, 'dashes': False, 'datasource': '${DS_OPENNMS-PM}', 'description': description, 'fill': 1, 'fillGradient': 0, 'gridPos': { 'h': 9, 'w': 12, 'x': 0, 'y': 0 }, 'hiddenSeries': False, 'id': panel_id, 'legend': { 'show': True, 'alignAsTable': True }, 'lines': True, 'lineWidth': 1, 'nullPointMode': 'null', 'options': { 'dataLinks': [] }, 'percentage': False, 'pointradius': 2, 'renderer': 'flot', 'seriesOverrides': [], 'spaceLength': 10, 'stack': False, 'steppedLine': False, 'targets': [], 'thresholds': [], 'timeFrom': None, 'timeRegions': [], 'timeShift': None, 'title': title, 'tooltip': { 'shared': True, 'sort': 0, 'value_type': 'individual' }, 'type': 'graph', 'xaxis': { 'buckets': None, 'mode': 'time', 'name': None, 'show': True, 'values': [] }, 'yaxes': [], 'yaxis': { 'align': False, 'alignLevel': None } }
+  panel_dict = { 'aliasColors': {}, 'bars': False, 'dashLength': 10, 'dashes': False, 'datasource': '${DS_OPENNMS-PM}', 'description': description, 'fill': 1, 'fillGradient': 0, 'gridPos': { 'h': height, 'w': width, 'x': x_loc, 'y': y_loc }, 'hiddenSeries': False, 'id': panel_id, 'legend': { 'show': True, 'alignAsTable': True }, 'lines': True, 'lineWidth': 1, 'nullPointMode': 'null', 'options': { 'dataLinks': [] }, 'percentage': False, 'pointradius': 2, 'renderer': 'flot', 'seriesOverrides': [], 'spaceLength': 10, 'stack': False, 'steppedLine': False, 'targets': [], 'thresholds': [], 'timeFrom': None, 'timeRegions': [], 'timeShift': None, 'title': title, 'tooltip': { 'shared': True, 'sort': 0, 'value_type': 'individual' }, 'type': 'graph', 'xaxis': { 'buckets': None, 'mode': 'time', 'name': None, 'show': True, 'values': [] }, 'yaxes': [], 'yaxis': { 'align': False, 'alignLevel': None } }
 
   for bute in attributes:
     ref_id = 'A' + str(ref_idx)
