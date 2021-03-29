@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import sys
 import snmp_graph
 import ksc_report
 import grafana_dashboard
@@ -10,8 +11,12 @@ g_url_base = "http://localhost:3000"
 g_api_key = "eyJrIjoiRURGa25RSkpwTTlQYXQ2WVY2emZXMjFRb2VjQkFLcksiLCJuIjoicHl0aG9uLXB1c2hlciIsImlkIjoxfQ=="
 output_dir = "./dashboards/"
 
-sg = snmp_graph.load_graphs("/Users/jeffg/Documents/clients/USPTO/2020/20201222_ksc_report_to_grafana/snmp-graph.properties.d")
-ksc = ksc_report.load_reports("/Users/jeffg/Documents/clients/USPTO/2020/20201222_ksc_report_to_grafana/ksc-performance-reports.xml")
+if len(sys.argv) != 3:
+  raise ValueError('Please provide pathnames to snmp-graph.properties.d and ksc-performance-reports.xml')
+  print(f'Usage: {sys.argv[0]} /path/to/snmp-graph.properties.d /path/to/ksc-performance-reports.xml')
+
+sg = snmp_graph.load_graphs(sys.argv[1])
+ksc = ksc_report.load_reports(sys.argv[2])
 
 for report in ksc:
   dash_dict = grafana_dashboard.empty_dashboard()
